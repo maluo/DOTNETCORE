@@ -1,4 +1,5 @@
 using Core.Entities;
+using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,32 +11,51 @@ namespace API.Controllers
     public class ProductController : ControllerBase
     {
         private readonly StoreContext _context;
+        private readonly IProductRepository _productRepo;
 
-        public ProductController(StoreContext context)
+        public ProductController(StoreContext context, IProductRepository productRepository)
         {
             _context = context;
+            _productRepo = productRepository;
         }
 
         [HttpGet]
         //query could perform complex database operations
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts()
         {
-            return await _context.Products.ToListAsync();
+            return Ok(await _productRepo.GetProductsAsync());
         }
 
         [HttpGet("{id:int}")] //api/products/3
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            return (product == null) ? NotFound() : product;
+            var product = await _productRepo.GetProductByIdAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return product;
+            // var product = await _productRepo.GetProductByIdAsync(id);
+            // return (product == null) ? NotFound() : product;
         }
 
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct(Product product)
         {
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-            return product;
+
+            // Using the repository to add a new product
+            _productRepo.CreateProduct(product);
+            if (await _productRepo.SaveChagnesAsync())
+            {
+                //It will directs the site to the new location
+                return CreatedAtAction("GetProduct", new { id = product.Id }, product);
+            }
+            return BadRequest("Could not create the product");
+
+            // Alternatively, using the context directly:
+            // _context.Products.Add(product);
+            // await _context.SaveChangesAsync();
+            //return product;
         }
 
         [HttpPut("{id:int}")]
@@ -45,9 +65,16 @@ namespace API.Controllers
             {
                 return BadRequest("Can not update this product");
             }
-            _context.Entry(product).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return product;
+            _productRepo.UpdateProduct(product);
+            if (await _productRepo.SaveChagnesAsync())
+            {
+                return NoContent();
+            }
+            return BadRequest("Could not update the product");
+
+            // _context.Entry(product).State = EntityState.Modified;
+            // await _context.SaveChangesAsync();
+            // return product;
         }
         
         private bool ProductExists(int id)
@@ -58,14 +85,23 @@ namespace API.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
+
+            var product = await _productRepo.GetProductByIdAsync(id);
+            if (product == null)  return NotFound();
+            _productRepo.DeleteProduct(product);
+            if (await _productRepo.SaveChagnesAsync())
             {
-                return NotFound();
+                return NoContent();
             }
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            return BadRequest("Could not delete the product");
+
+            //var product = await _context.Products.FindAsync(id);
+            // if (product == null)
+            // {
+            //     return NotFound();
+            // }
+            // _context.Products.Remove(product);
+            // await _context.SaveChangesAsync();
         }
     }
 }
