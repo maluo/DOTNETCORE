@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11111.16 d18.0
+VisualStudioVersion = 18.0.11111.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{5A882056-E714-48DE-A3F4-DB381EF7E7C2}"
 EndProject
@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorUI", "RazorUI\RazorUI.csproj", "{53EA0431-0855-40FA-AAC7-735FFD92B2F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +34,10 @@ Global
 		{863AA630-FDCB-4C33-8A1B-35D6234F030E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{863AA630-FDCB-4C33-8A1B-35D6234F030E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{863AA630-FDCB-4C33-8A1B-35D6234F030E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53EA0431-0855-40FA-AAC7-735FFD92B2F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53EA0431-0855-40FA-AAC7-735FFD92B2F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53EA0431-0855-40FA-AAC7-735FFD92B2F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53EA0431-0855-40FA-AAC7-735FFD92B2F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
