@@ -71,6 +71,8 @@ namespace Infrastructure.Data
                 }
             }
     
+            //apply paging here
+            //page_size * (page_number - 1), page_size
             return await query.ToListAsync();
             // return await _context.Products.ToListAsync();
         }

@@ -16,6 +16,8 @@ builder.Services.AddDbContext<StoreContext>(opt =>
     );
 });
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+//no idea about the types here, would just use a generic type with <>
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 //builder.Services.AddEndpointsApiExplorer();
