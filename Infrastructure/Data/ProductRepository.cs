@@ -36,9 +36,43 @@ namespace Infrastructure.Data
         {
             return await _context.Products.FindAsync(id);
         }
-        public async Task<IReadOnlyList<Product>> GetProductsAsync()
+        public async Task<IReadOnlyList<Product>> GetProductsAsync(string? brand, string? type, string? srot)
         {
-            return await _context.Products.ToListAsync();
+            var query = _context.Products.AsQueryable();
+
+            if (!string.IsNullOrEmpty(brand))
+            {
+                query = query.Where(p => p.Brand == brand);
+            }
+
+            if (!string.IsNullOrEmpty(type))
+            {
+                query = query.Where(p => p.Type == type);
+            }
+
+            if (!string.IsNullOrEmpty(srot))
+            {
+                switch (srot.ToLower())
+                {
+                    case "priceasc":
+                        query = query.OrderBy(p => p.Price);
+                        break;
+                    case "pricedesc":
+                        query = query.OrderByDescending(p => p.Price);
+                        break;
+                    case "nameasc":
+                        query = query.OrderBy(p => p.Name);
+                        break;
+                    case "namedesc":
+                        query = query.OrderByDescending(p => p.Name);
+                        break;
+                    default:
+                        break;
+                }
+            }
+    
+            return await query.ToListAsync();
+            // return await _context.Products.ToListAsync();
         }
         public bool ProductExists(int id)
         {

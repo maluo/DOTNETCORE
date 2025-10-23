@@ -21,9 +21,13 @@ namespace API.Controllers
 
         [HttpGet]
         //query could perform complex database operations
-        public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts()
+        // public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts()
+        // {
+        //     return Ok(await _productRepo.GetProductsAsync());
+        // }
+        public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string? brand, string? type, string? sort)
         {
-            return Ok(await _productRepo.GetProductsAsync());
+            return Ok(await _productRepo.GetProductsAsync(brand,type,sort));
         }
 
         [HttpGet("{id:int}")] //api/products/3
