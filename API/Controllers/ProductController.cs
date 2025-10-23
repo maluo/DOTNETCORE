@@ -76,7 +76,7 @@ namespace API.Controllers
             // await _context.SaveChangesAsync();
             // return product;
         }
-        
+
         private bool ProductExists(int id)
         {
             return _context.Products.Any(e => e.Id == id);
@@ -87,7 +87,7 @@ namespace API.Controllers
         {
 
             var product = await _productRepo.GetProductByIdAsync(id);
-            if (product == null)  return NotFound();
+            if (product == null) return NotFound();
             _productRepo.DeleteProduct(product);
             if (await _productRepo.SaveChagnesAsync())
             {
@@ -102,6 +102,16 @@ namespace API.Controllers
             // }
             // _context.Products.Remove(product);
             // await _context.SaveChangesAsync();
+        }
+        [HttpGet("brands")]
+        public async Task<ActionResult<IReadOnlyList<string>>> GetProductBrands()
+        {
+            return Ok(await _productRepo.GetBrandsAsync());
+        }
+        [HttpGet("types")]
+        public async Task<ActionResult<IReadOnlyList<string>>> GetProductTypes()
+        {
+            return Ok(await _productRepo.GetTypessAsync());
         }
     }
 }

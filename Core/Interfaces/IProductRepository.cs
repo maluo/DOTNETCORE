@@ -10,11 +10,13 @@ namespace Core.Interfaces
     {
         Task<IReadOnlyList<Product>> GetProductsAsync();
         //could be null if not found
-        Task<Product?> GetProductByIdAsync(int id); 
+        Task<Product?> GetProductByIdAsync(int id);
         void CreateProduct(Product product);
         void UpdateProduct(Product product);
         void DeleteProduct(Product product);
         Task<bool> SaveChagnesAsync();
         bool ProductExists(int id);
+        Task<IReadOnlyList<string>> GetBrandsAsync();
+        Task<IReadOnlyList<string>> GetTypessAsync();
     }
 }

@@ -48,5 +48,13 @@ namespace Infrastructure.Data
         {
             return await _context.SaveChangesAsync() > 0;
         }
+        public async Task<IReadOnlyList<string>> GetBrandsAsync()
+        {
+            return await _context.Products.Select(p => p.Brand).Distinct().ToListAsync();
+        }
+        public async Task<IReadOnlyList<string>> GetTypessAsync()
+        {
+            return await _context.Products.Select(p => p.Type).Distinct().ToListAsync();
+        }
     }
 }
