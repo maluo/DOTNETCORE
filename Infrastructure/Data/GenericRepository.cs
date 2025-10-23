@@ -85,5 +85,10 @@ namespace Infrastructure.Data
         {
             return await ApplySpec(spec).ToListAsync();
         }
+
+        public async Task<int> CountAsync(ISpec<T> spec)
+        {
+            return await ApplySpec(spec).CountAsync();
+        }
     }
 }

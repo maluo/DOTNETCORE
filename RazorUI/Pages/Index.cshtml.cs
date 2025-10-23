@@ -9,19 +9,21 @@ namespace RazorUI.Pages
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly IProductRepository _productRepository;
+        private readonly IGenericRepository<Product> _repo;
 
-        public IndexModel(ILogger<IndexModel> logger, IProductRepository productRepository)
+        public IndexModel(ILogger<IndexModel> logger, IProductRepository productRepository, IGenericRepository<Product> repo)
         {
             _logger = logger;
             _productRepository = productRepository;
             ProductList = new List<Product>();
+            _repo = repo;
         }
 
         public IReadOnlyList<Product> ProductList { get; set; }
 
         public async Task OnGetAsync()
         {
-            ProductList = await _productRepository.GetProductsAsync();
+            ProductList = await _repo.ListAllAsync();
             _logger.LogInformation("OnGetAsync executed.");
         }
 

@@ -31,11 +31,21 @@ namespace Core.Specs
 
         //distinct spec here
         public bool isDistinct { get; private set; }
-
         protected void ApplyDistinct()
         {
             isDistinct = true;
         }
+        protected void ApplyPaging(int skip, int take)
+        {
+            Skip = skip;
+            Take = take;
+            isPagingEnabled = true;
+        }
+        public int Take { get; private set; }
+
+        public int Skip { get; private set; }
+
+        public bool isPagingEnabled { get; private set; }
     }
     
     public class BaseSepc<T, TResult>(Expression<Func<T,bool>> criteria) : BaseSepc<T>(criteria), ISpec<T, TResult>

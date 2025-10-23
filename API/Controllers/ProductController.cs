@@ -1,3 +1,4 @@
+using API.RequestHelpers;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specs;
@@ -9,7 +10,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductController : ControllerBase
+    public class ProductController : BaseApiController
     {
         private readonly StoreContext _context;
         private readonly IProductRepository _productRepo;
@@ -29,14 +30,30 @@ namespace API.Controllers
         *  public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string? brand, string? type, string? sort){}
         *  Using specification pattern
         *  public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts([FromQuery] ProductSpecParams productParams){}
-        */  
+        */
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string? brand, string? type, string? sort)
+        public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts([FromQuery] ProductSpecParams productParams)
         {
-            //return Ok(await _productRepo.GetProductsAsync(brand,type,sort));
-            var spec = new ProductSpec(brand, type, sort);
+            /*
+            step1 - simple repo calling:
+            return Ok(await _productRepo.GetProductsAsync(brand,type,sort));
+            */
+            
+            /* step2 - spec pattern with pagination:
+            var spec = new ProductSpec(productParams);
             var products = await _genericRepo.ListAsync(spec);
-            return Ok(products);
+            var count = await _genericRepo.CountAsync(spec);
+            var pagination = new Pagination<Product>(productParams.PageIndex, productParams.PageSize, count, products); 
+            */
+
+            //step3 customized API Controller function.
+            var spec = new ProductSpec(productParams);
+            return await CreatedPagedResult(_genericRepo, spec, productParams.PageIndex, productParams.PageSize);
+        }
+        
+        public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts()
+        {
+            return Ok(await _genericRepo.ListAllAsync());
         }
 
         [HttpGet("{id:int}")] //api/products/3

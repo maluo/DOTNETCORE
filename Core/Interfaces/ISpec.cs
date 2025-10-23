@@ -9,6 +9,11 @@ namespace Core.Interfaces
         Expression<Func<T, object>>? OrderBy { get; }
         Expression<Func<T, object>>? OrderByDesc { get; }
         bool isDistinct { get; }
+
+        //paging params
+        int Take { get; }
+        int Skip { get; }
+        bool isPagingEnabled { get; }
     }
 
     //change the projection to other entities

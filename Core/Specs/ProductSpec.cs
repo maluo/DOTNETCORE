@@ -9,13 +9,17 @@ namespace Core.Specs
 {
     public class ProductSpec : BaseSepc<Product>
     {
-        public ProductSpec(string? brand, string? type, string? sort): 
-            base(
-                (x => (string.IsNullOrWhiteSpace(brand) || x.Brand == brand) &&
-                (string.IsNullOrWhiteSpace(type) || x.Type == type)))
+        public ProductSpec(ProductSpecParams specParams) : 
+            base(x =>
+            (string.IsNullOrWhiteSpace(specParams.Search) || x.Name.ToLower().Contains(specParams.Search)) &&
+            (!specParams.Brands.Any() || specParams.Brands.Contains(x.Brand)) &&
+            (!specParams.Types.Any() || specParams.Types.Contains(x.Type)))
         {
-            if (string.IsNullOrWhiteSpace(sort)) return;
-            switch (sort.ToLower())
+            if (string.IsNullOrWhiteSpace(specParams.sort)) return;
+
+            ApplyPaging(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
+
+            switch (specParams.sort.ToLower())
             {
                 case "priceasc":
                     AddOrderBy(p => p.Price);
