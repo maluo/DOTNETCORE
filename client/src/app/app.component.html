@@ -1,0 +1,39 @@
+<!-- <h1 class="text-3xl font-bold underline">Welcome to {{title}}</h1> -->
+
+<!-- csv-parser.component.html -->
+<div class="csv-container">
+  <input
+    type="file"
+    #fileInput
+    (change)="onFileSelected($event)"
+    accept=".csv"
+    style="display: none"
+  />
+
+  <button (click)="fileInput.click()" class="btn">
+    📁 Select CSV File
+  </button>
+
+  <div *ngIf="csvData.length > 0" class="table-container">
+    <h3>CSV Data ({{ csvData.length }} rows)</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th *ngFor="let header of headers">{{ header }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of csvData; let i = index">
+          <td *ngFor="let header of headers">
+            {{ row[header] }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="error" class="error">
+    {{ error }}
+  </div>
+</div>
+
